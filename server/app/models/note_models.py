@@ -1,26 +1,33 @@
-from pydantic import BaseModel, Field
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, Field
 from bson import ObjectId
 
-class NoteCreate(BaseModel):
+
+class NoteBase(BaseModel):
     title: str
-    content: Optional[str] = None
+    content: str
     pinned: bool = False
-    serial_no: Optional[int] = None  # For drag/drop order
+
+
+class NoteCreate(NoteBase):
+    order: Optional[int] = None
+
 
 class NoteUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
     pinned: Optional[bool] = None
-    serial_no: Optional[int] = None
+    order: Optional[int] = None
 
-class NoteOut(BaseModel):
-    id: str
-    user_id: str
-    title: str
-    content: Optional[str]
-    pinned: bool
-    serial_no: Optional[int]
-    created_at: datetime
-    updated_at: datetime
+
+class NoteDB(NoteBase):
+    id: str = Field(default_factory=str, alias="_id")
+    creator_id: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    order: Optional[int] = None
+
+    class Config:
+        json_encoders = {ObjectId: str}
+        orm_mode = True

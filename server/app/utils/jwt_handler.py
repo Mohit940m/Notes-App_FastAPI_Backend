@@ -1,6 +1,9 @@
 from datetime import datetime, timedelta
 from jose import jwt
+from fastapi.security import OAuth2PasswordBearer
 from app.core.config import settings
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/login")
 
 def create_access_token(data: dict, expires_delta: int = 60):
     to_encode = data.copy()

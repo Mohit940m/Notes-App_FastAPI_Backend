@@ -1,5 +1,6 @@
 from app.core.database import users_collection
 from app.utils.password_handler import hash_password
+# from app.utils.auth import hash_password
 
 import datetime
 

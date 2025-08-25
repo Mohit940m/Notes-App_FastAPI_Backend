@@ -3,6 +3,8 @@ from app.models.user_models import UserCreate, UserLogin
 from app.services.user_service import create_user, find_user_by_email
 from app.utils.password_handler import verify_password
 from app.utils.jwt_handler import create_access_token
+# from app.utils.auth import verify_password, create_access_token
+
 
 async def register_user(user: UserCreate):
     existing_user = await find_user_by_email(user.email)
