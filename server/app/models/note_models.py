@@ -30,4 +30,4 @@ class NoteDB(NoteBase):
 
     class Config:
         json_encoders = {ObjectId: str}
-        orm_mode = True
+        from_attributes = True

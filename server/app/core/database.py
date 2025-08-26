@@ -1,9 +1,15 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from .config import settings
 
-clitent = AsyncIOMotorClient(settings.MONGO_URI)
+client = AsyncIOMotorClient(settings.MONGO_URI)
 
-db = clitent[settings.DATABASE_NAME]
+db = client[settings.DATABASE_NAME]
+
+async def get_db():
+    
+    print("Database connection established")
+    yield db
+    print("Database connection closed")
 
 users_collection = db["users"]
 notes_collection = db["notes"]
