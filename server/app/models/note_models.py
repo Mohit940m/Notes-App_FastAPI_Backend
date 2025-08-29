@@ -31,3 +31,8 @@ class NoteDB(NoteBase):
     class Config:
         json_encoders = {ObjectId: str}
         from_attributes = True
+
+
+class NoteReorderPayload(BaseModel):
+    note_id: str
+    order: int

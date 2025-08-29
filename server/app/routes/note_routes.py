@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
-from app.models.note_models import NoteCreate, NoteUpdate, NoteDB
+from app.models.note_models import NoteCreate, NoteUpdate, NoteDB, NoteReorderPayload
 from app.services.note_service import NoteService
 from app.core.database import get_db
 from app.utils.auth import get_current_user
@@ -38,8 +38,9 @@ async def delete_note(note_id: str, db=Depends(get_db), current_user=Depends(get
         raise HTTPException(status_code=404, detail="Note not found")
     return {"deleted": True}
 
-
+# Endpoint to reorder notes
+# This expects a list of note IDs in the desired order
 @router.post("/reorder", response_model=List[NoteDB])
-async def reorder_notes(note_ids: List[str], db=Depends(get_db), current_user=Depends(get_current_user)):
+async def reorder_notes(reorder_data: List[NoteReorderPayload], db=Depends(get_db), current_user=Depends(get_current_user)):
     service = NoteService(db)
-    return await service.reorder_notes(creator_id=str(current_user["_id"]), note_ids=note_ids)
+    return await service.reorder_notes(creator_id=str(current_user["_id"]), reorder_data=reorder_data)
